@@ -1,0 +1,9 @@
+megs: 2048
+romimage: file=/usr/share/bochs/BIOS-bochs-latest
+vgaromimage: file=/usr/share/bochs/VGABIOS-lgpl-latest
+ata0-master: type=disk, path=disk.img
+boot: disk 
+log: bochsout.txt
+mouse: enabled=0
+clock: sync=realtime
+cpu: ips=10000000
