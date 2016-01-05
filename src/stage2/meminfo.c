@@ -2,12 +2,9 @@
 #include "print.h"
 #include <stdlib.h>
 
-void print_meminfo(uint64_t nSMAP)
+void print_meminfo(meminfo_t *arr_meminfo, uint64_t nSMAP)
 {
     uint64_t i;
-    meminfo_t *arr_meminfo = (meminfo_t*)0x1000;
-    //meminfo_t arr_meminfo[6];
-    //memcpy(arr_meminfo, (void*)0x1000, nSMAP);
 
     monitor_write("BASE              |LIMIT             |TYPE\n");
     for(i = 0;i < nSMAP;i++)

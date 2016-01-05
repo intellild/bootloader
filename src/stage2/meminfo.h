@@ -8,4 +8,4 @@ typedef struct
     uint32_t acpi3;
 } meminfo_t;
 
-void print_meminfo(uint64_t nSMAP);
+void print_meminfo(meminfo_t *arr_meminfo, uint64_t nSMAP);

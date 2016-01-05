@@ -7,6 +7,9 @@ void __Start()
     uint64_t nSMAP = 0;
     asm volatile("movq %%r8,%0":"=r"(nSMAP)::);
 
+    meminfo_t meminfo[nSMAP];
+    memcpy(meminfo, (void*)0x1000, sizeof(meminfo_t)*nSMAP);
+
     monitor_clear();
     monitor_write("reached bootstage2\n");
 
@@ -15,7 +18,7 @@ void __Start()
     monitor_put('\n');
     monitor_put('\n');
 
-    print_meminfo(nSMAP);
+    print_meminfo(meminfo, nSMAP);
 
     hang();
 }
