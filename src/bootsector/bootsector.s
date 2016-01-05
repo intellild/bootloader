@@ -50,7 +50,7 @@ Main:
 .A20_enabled:
     ; a20 is enabled
     ; detect memory
-    mov si,pSMAP
+    mov di, pSMAP
     call Detect_memory
 
     mov si,BOOTLOADER

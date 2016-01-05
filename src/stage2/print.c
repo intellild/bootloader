@@ -1,6 +1,12 @@
 #include "print.h"
 #include "common.h"
 
+// The VGA framebuffer starts at 0xB8000.
+uint16_t *video_memory = (uint16_t*)0xB8000;
+// Stores the cursor position.
+uint8_t cursor_x = 0;
+uint8_t cursor_y = 0;
+
 // Updates the hardware cursor.
 static void move_cursor()
 {
@@ -47,7 +53,7 @@ void monitor_put(char c)
 {
    // The background colour is black (0), the foreground is white (15).
    uint8_t backColour = 0;
-   uint8_t foreColour = 15;
+   uint8_t foreColour = 7;
 
    // The attribute byte is made up of two nibbles - the lower being the
    // foreground colour, and the upper the background colour.
@@ -102,4 +108,67 @@ void monitor_put(char c)
    scroll();
    // Move the hardware cursor.
    move_cursor();
+}
+
+// Clears the screen, by copying lots of spaces to the framebuffer.
+void monitor_clear()
+{
+   // Make an attribute byte for the default colours
+   uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
+   uint16_t blank = 0x20 /* space */ | (attributeByte << 8);
+
+   int i;
+   for (i = 0; i < 80*25; i++)
+   {
+       video_memory[i] = blank;
+   }
+
+   // Move the hardware cursor back to the start.
+   cursor_x = 0;
+   cursor_y = 0;
+   move_cursor();
+}
+
+// Outputs a null-terminated ASCII string to the monitor.
+void monitor_write(char *c)
+{
+   int i = 0;
+   while (c[i])
+   {
+       monitor_put(c[i++]);
+   }
+}
+
+void monitor_print_hex32(uint64_t x)
+{
+    char hex[11];
+    char chtable[16] = "0123456789ABCDEF";
+    int i;
+    hex[0] = '0';
+    hex[1] = 'x';
+    hex[10] = '\0';
+
+    for(i = 0;i < 8;i++)
+    {
+        int tmp = (x >> (4 * i)) & 0xf;
+        hex[9 - i] = chtable[tmp];
+    }
+    monitor_write(hex);
+}
+
+void monitor_print_hex64(uint64_t x)
+{
+    char hex[19];
+    char chtable[16] = "0123456789ABCDEF";
+    int i;
+    hex[0] = '0';
+    hex[1] = 'x';
+    hex[18] = '\0';
+
+    for(i = 0;i < 16;i++)
+    {
+        int tmp = (x >> (4 * i)) & 0xf;
+        hex[17 - i] = chtable[tmp];
+    }
+    monitor_write(hex);
 }

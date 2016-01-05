@@ -3,6 +3,7 @@
 [BITS 16]
 Main:
     cld
+    mov [nSMAP],bx
     mov si,HELLO
     call Print
 
@@ -176,7 +177,10 @@ Print:
     popad                             ; Pop all general purpose registers to save them.
     ret
 ;=================================================================
+nSMAP dq 0x0
+;=================================================================
 [BITS 64]
 LongMode:
+    mov r8,[nSMAP]
     mov rax,0xaaaaaaaabbbbbbbb
     jmp 0x8000
