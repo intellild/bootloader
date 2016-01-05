@@ -1,30 +1,30 @@
 [ORG 0x7c00]
 [BITS 16]
 
-%define NUM_OF_SECTORS 0x01
-%define pSMAP 0x0000
+%define NUM_OF_SECTORS 0x10
+%define pSMAP 0x1000
 
 ; Main entry point where BIOS leaves us.
- 
+
 Main:
     jmp 0x0000:.FlushCS               ; Some BIOS' may load us at 0x0000:0x7C00 while other may load us at 0x07C0:0x0000.
                                       ; Do a far jump to fix this issue, and reload CS to 0x0000.
- 
-.FlushCS:   
+
+.FlushCS:
     xor ax, ax
- 
+
     ; Set up segment registers.
     mov ss, ax
     ; Set up stack so that it starts below Main.
     mov sp, Main
- 
+
     mov ds, ax
     mov es, ax
     mov fs, ax
     mov gs, ax
-    
+
     cld
-    
+
     ; set display mode by bios
     ; characters only
     ; 80*25
@@ -32,30 +32,30 @@ Main:
     mov ah,0x00
     mov al,0x03
     int 0x10
-    
+
     mov si,BOOTING
     call Print
-    
+
 .Test_a20:
     call Check_a20
     test ax,ax
     jnz .A20_enabled               ; A20 has been enabled, skip enable a20
-    
+
     ; enable a20 using bios
     mov ax, 0x2401
     int 0x15
-    
+
     jmp .Test_a20
-    
+
 .A20_enabled:
     ; a20 is enabled
     ; detect memory
     mov si,pSMAP
     call Detect_memory
-    
+
     mov si,BOOTLOADER
     call Print
-    
+
     mov ah,0x02
     mov al,NUM_OF_SECTORS
     mov ch,0x0
@@ -64,19 +64,19 @@ Main:
     mov dl,0x80
     mov bx,0x7e00
     int 0x13
-    
+
     test ah,ah
     jnz Error
     mov bx,[nSMAP]
     jmp 0x7e00
-    
-Error:    
+
+Error:
     mov si,ERROR
     call Print
     jmp $
 
 ; messages
-BOOTING db "Booting...", 0x0A, 0x0D, 0 
+BOOTING db "Booting...", 0x0A, 0x0D, 0
 BOOTLOADER db "Loading bootloader...", 0x0A, 0x0D, 0
 ERROR db "Error!!!", 0x0A, 0x0D, 0
 ;=========================================================
@@ -87,47 +87,47 @@ Check_a20:
     push es
     push di
     push si
- 
+
     cli
- 
+
     xor ax, ax ; ax = 0
     mov es, ax
- 
+
     not ax ; ax = 0xFFFF
     mov ds, ax
- 
+
     mov di, 0x0500
     mov si, 0x0510
- 
+
     mov al, byte [es:di]
     push ax
- 
+
     mov al, byte [ds:si]
     push ax
- 
+
     mov byte [es:di], 0x00
     mov byte [ds:si], 0xFF
- 
+
     cmp byte [es:di], 0xFF
- 
+
     pop ax
     mov byte [ds:si], al
- 
+
     pop ax
     mov byte [es:di], al
- 
+
     mov ax, 0
     je .Check_a20__exit
- 
+
     mov ax, 1
- 
+
 .Check_a20__exit:
     pop si
     pop di
     pop es
     pop ds
     popf
- 
+
     ret
 ;=========================================================
 ; use the INT 0x15, eax= 0xE820 BIOS function to get a memory map
@@ -183,11 +183,11 @@ Print:
 .PrintLoop:
     lodsb                             ; Load the value at [@es:@si] in @al.
     test al, al                       ; If AL is the terminator character, stop printing.
-    je .PrintDone                  	
-    mov ah, 0x0E	
+    je .PrintDone
+    mov ah, 0x0E
     int 0x10
     jmp .PrintLoop                    ; Loop till the null character not found.
- 
+
 .PrintDone:
     popad                             ; Pop all general purpose registers to save them.
     ret
