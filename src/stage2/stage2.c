@@ -2,7 +2,7 @@
 #include "common.h"
 #include "meminfo.h"
 
-void __Main()
+void __Start()
 {
     uint64_t nSMAP = 0;
     asm volatile("movq %%r8,%0":"=r"(nSMAP)::);

@@ -1,4 +1,4 @@
-SOURCES=boot.o stage2.o common.o print.o meminfo.o
+SOURCES=stage2.o common.o print.o meminfo.o
 
 CC=clang
 CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti
