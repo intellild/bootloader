@@ -1,7 +1,7 @@
-SOURCES=stage2.o common.o print.o meminfo.o
+SOURCES=stage2.o print.o meminfo.o disk.o
 
 CC=clang
-CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti
+CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -mno-sse -mno-sse2 -mno-mmx -O3
 LDFLAGS=-Tlink.ld
 AS=nasm
 ASFLAGS=-felf64
