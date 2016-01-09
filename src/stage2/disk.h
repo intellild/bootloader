@@ -13,8 +13,8 @@ typedef struct {
   uint32_t total;
 } dpt_t;
 
-void get_dpt_info(dpt_t *dpt);
-void print_dpt(dpt_t *dpt);
+void get_dpt_info(dpt_t dpt[4]);
+void print_dpt(dpt_t dpt[4]);
 void read_disk(void *buf, uint32_t lba, uint8_t cntSector);
 
 void disk_reset(void);

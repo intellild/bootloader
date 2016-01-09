@@ -11,44 +11,48 @@
 
 #define DISK_STAT inb(0x1F7)
 
-void get_dpt_info(dpt_t *dpt) {
-  uint8_t parinfo[16];
+void get_dpt_info(dpt_t dpt[4]) {
+  memset(dpt, 0, sizeof(dpt_t) * 4);
+
   int i;
   for (i = 0; i < 4; i++) {
-    memcpy(parinfo, (void *)((uint64_t)0x7C00 + 446 + i * 16), 16);
+    uint8_t *parinfo = (void *)0x7c00 + 446 + i * 16;
     if (parinfo[0] == 0x80) {
       dpt[i].active = true;
     }
 
-    dpt[i].lbaBeg += parinfo[1] * 63 * 255;
-    dpt[i].lbaBeg += (parinfo[2] & 0x3F) * 63;
+    dpt[i].lbaBeg += parinfo[1] * 63;
+    dpt[i].lbaBeg += parinfo[2] & 0x3f - 1;
     dpt[i].lbaBeg +=
-        (((uint16_t)parinfo[2] & 0xC0) << 2) + (uint16_t)parinfo[3] - 1;
+        ((((uint16_t)parinfo[2] & 0xC0) << 2) + parinfo[3]) * 16 * 63;
 
     dpt[i].type = parinfo[4];
 
-    dpt[i].lbaEnd += parinfo[5] * 63 * 255;
-    dpt[i].lbaEnd += (parinfo[6] & 0x3F) * 63;
+    dpt[i].lbaEnd += parinfo[5] * 63;
+    dpt[i].lbaEnd += parinfo[6] & 0x3f - 1;
     dpt[i].lbaEnd +=
-        (((uint16_t)parinfo[6] & 0xC0) << 2) + (uint16_t)parinfo[7] - 1;
+        ((((uint16_t)parinfo[6] & 0xC0) << 2) + parinfo[7]) * 16 * 63;
 
-    dpt[i].used = *((uint32_t *)&parinfo[8]);
-    dpt[i].total = *((uint32_t *)&parinfo[2]);
+    dpt[i].total = *(uint32_t *)&parinfo[8];
+    dpt[i].used = *(uint32_t *)&parinfo[12];
   }
 }
 
 void print_dpt(dpt_t *dpt) {
   int i;
   for (i = 0; i < 4; i++) {
-    if (dpt[i].)
-      monitor_write("partition ");
+    // if (dpt[i].type != 0) {
+    monitor_write("partition ");
     monitor_print_hex(i, 8);
     monitor_write(":\n");
+    monitor_write("ident: ");
+    monitor_print_hex(dpt[i].type, 8);
     monitor_write(" BEG: ");
     monitor_print_hex(dpt[i].lbaBeg, 32);
     monitor_write(" END: ");
     monitor_print_hex(dpt[i].lbaEnd, 32);
     monitor_put('\n');
+    //}
   }
 }
 
