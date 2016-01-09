@@ -22,5 +22,8 @@ void __Start() {
   get_dpt_info(dpt);
   print_dpt(dpt);
 
+  char buf[512];
+  read_disk(buf, 2048, 1);
+
   hang();
 }

@@ -8,7 +8,7 @@ uint8_t cursor_x = 0;
 uint8_t cursor_y = 0;
 
 // Updates the hardware cursor.
-static void move_cursor() {
+static void move_cursor(void) {
   // The screen is 80 characters wide...
   uint16_t cursorLocation = cursor_y * 80 + cursor_x;
   outb(0x3D4, 14); // Tell the VGA board we are setting the high cursor byte.
@@ -18,7 +18,7 @@ static void move_cursor() {
 }
 
 // Scrolls the text on the screen up by one line.
-static void scroll() {
+static void scroll(void) {
 
   // Get a space character with the default colour attributes.
   uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
@@ -99,7 +99,7 @@ void monitor_put(char c) {
 }
 
 // Clears the screen, by copying lots of spaces to the framebuffer.
-void monitor_clear() {
+void monitor_clear(void) {
   // Make an attribute byte for the default colours
   uint8_t attributeByte = (0 /*black*/ << 4) | (15 /*white*/ & 0x0F);
   uint16_t blank = 0x20 /* space */ | (attributeByte << 8);
