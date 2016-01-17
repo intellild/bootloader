@@ -1,7 +1,7 @@
 [ORG 0x7c00]
 [BITS 16]
 
-%define NUM_OF_SECTORS 0x10
+%define NUM_OF_SECTORS 0x20
 %define pSMAP 0x1000
 
 ; Main entry point where BIOS leaves us.

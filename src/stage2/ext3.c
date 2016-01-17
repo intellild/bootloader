@@ -2,7 +2,15 @@
 #include "disk.h"
 #include "common.h"
 
+static uint8_t buf[512];
+
 bool ext3_verify_partition(dpt_t dpt) {
-  uint8_t buf[512];
-  read_disk(buf, dpt.lbaBeg + 2, 1);
+  ext3_super_block_t *psuperblock = (ext3_super_block_t *)buf;
+  read_disk(buf, dpt.lbaBeg + 2, 2);
+
+  if (psuperblock->signature != 0xEF53) {
+    return false;
+  }
+
+  return true;
 }

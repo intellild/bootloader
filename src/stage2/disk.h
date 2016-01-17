@@ -2,6 +2,7 @@
 #define DISK_H
 
 #include <inttypes.h>
+#include <stdbool.h>
 #include "common.h"
 
 typedef struct {

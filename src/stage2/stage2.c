@@ -2,6 +2,7 @@
 #include "common.h"
 #include "meminfo.h"
 #include "disk.h"
+#include "ext3.h"
 
 static dpt_t dpt[4];
 static uint64_t nSMAP;
@@ -19,6 +20,10 @@ void __Start() {
 
   get_dpt_info(dpt);
   print_dpt(dpt);
-  
+
+  if (ext3_verify_partition(dpt[0])) {
+    monitor_write("reached ext3 file system...\n\n");
+  }
+
   hang();
 }

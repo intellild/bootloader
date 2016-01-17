@@ -2,6 +2,16 @@
 #define EXT3_H
 
 #include <inttypes.h>
+#include <stdbool.h>
+#include "disk.h"
+
+#define EXT3_CLR 0
+#define EXT3_ERR 1
+#define EXT3_REC 4
+
+#define EXT3_CONTINUE 1
+#define EXT3_READONLY 2
+#define EXT3_EMERGENCY 3
 
 #pragma pack(push)
 #pragma pack(1)
