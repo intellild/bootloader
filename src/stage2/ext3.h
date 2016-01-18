@@ -5,18 +5,18 @@
 #include <stdbool.h>
 #include "disk.h"
 
-#define EXT3_CLR    0
-#define EXT3_ERR    1
-#define EXT3_REC    4
+#define EXT3_CLR 0
+#define EXT3_ERR 1
+#define EXT3_REC 4
 
-#define EXT3_CONTINUE   1
-#define EXT3_READONLY   2
-#define EXT3_EMERGENCY  3
+#define EXT3_CONTINUE 1
+#define EXT3_READONLY 2
+#define EXT3_EMERGENCY 3
 
-#define LINUX       0
-#define GNU_HURD    1
-#define MASIX       2
-#define FREEBSD     3
+#define LINUX 0
+#define GNU_HURD 1
+#define MASIX 2
+#define FREEBSD 3
 
 #pragma pack(push)
 #pragma pack(1)
@@ -81,6 +81,18 @@ typedef struct
     uint32_t creatTime;
     log_backup_info_t logBackupInfo;
 } ext3_super_block_t;
+
+typedef struct
+{
+    uint32_t begBlock;
+    uint32_t begiNode;
+    uint32_t begiTable;
+    uint16_t freeBlock;
+    uint16_t freeiNode;
+    uint16_t cntPath;
+    uint16_t padding;
+    uint8_t reserved[12];
+} ext3_block_group_descriptor_t;
 #pragma pack(pop) // pack(1)
 
 bool ext3_verify_partition(dpt_t dpt);
