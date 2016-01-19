@@ -1,5 +1,8 @@
 bin
 bochsout.txt
+GTAGS
+GRTAGS
+GPATH
 
 # Compiled Object files
 *.slo
