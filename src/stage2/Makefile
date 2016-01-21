@@ -1,10 +1,8 @@
 SOURCES=stage2.o print.o meminfo.o disk.o ext3.o
 
 CC=clang
-CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -mno-sse -mno-sse2 -mno-mmx -O3
+CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -mno-sse -mno-sse2 -mno-mmx -Os -DDEBUG
 LDFLAGS=-Tlink.ld
-AS=nasm
-ASFLAGS=-felf64
 
 all: $(SOURCES) link
 
