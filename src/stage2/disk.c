@@ -1,7 +1,7 @@
 #include "disk.h"
 #include "common.h"
 
-#ifdef DEBUG
+#ifndef NODEBUG
 #include "print.h"
 #endif
 
@@ -28,13 +28,13 @@ void get_dpt_info(dpt_t dpt[4])
         }
 
         dpt[i].lbaBeg += parinfo[1] * 63;
-        dpt[i].lbaBeg += parinfo[2] & 0x3f - 1;
+        dpt[i].lbaBeg += (parinfo[2] & 0x3f) - 1;
         dpt[i].lbaBeg += ((((uint16_t)parinfo[2] & 0xC0) << 2) + parinfo[3]) * 16 * 63;
 
         dpt[i].type = parinfo[4];
 
         dpt[i].lbaEnd += parinfo[5] * 63;
-        dpt[i].lbaEnd += parinfo[6] & 0x3f - 1;
+        dpt[i].lbaEnd += (parinfo[6] & 0x3f) - 1;
         dpt[i].lbaEnd += ((((uint16_t)parinfo[6] & 0xC0) << 2) + parinfo[7]) * 16 * 63;
 
         dpt[i].total = *(uint32_t*)&parinfo[8];
@@ -42,7 +42,7 @@ void get_dpt_info(dpt_t dpt[4])
     }
 }
 
-#ifdef DEBUG
+#ifndef NODEBUG
 void print_dpt(dpt_t* dpt)
 {
     int i;
@@ -112,7 +112,7 @@ void read_disk(void* buf, uint32_t lba, uint8_t cntSector)
         }
         if (DISK_STAT_ERR(stat))
         {
-#ifdef DEBUG
+#ifndef NODEBUG
             monitor_write("disk error 2\n");
 #endif
             hang();

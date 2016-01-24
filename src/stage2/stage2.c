@@ -17,13 +17,13 @@ void __Start()
     monitor_clear();
     monitor_write("reached bootstage2\n");
 
-#ifdef DEBUG
+#ifndef NODEBUG
     monitor_write("MEMORY INFO:\n");
     print_meminfo(meminfo, nSMAP);
 #endif
 
     get_dpt_info(dpt);
-#ifdef DEBUG
+#ifndef NODEBUG
     print_dpt(dpt);
 #endif
 
@@ -31,6 +31,9 @@ void __Start()
     {
         monitor_write("reached ext3 file system\n");
     }
+
+    static uint8_t buf[100];
+    ext3_read_file(&dpt[0], "kernel", buf, 0, 100);
 
     hang();
 }

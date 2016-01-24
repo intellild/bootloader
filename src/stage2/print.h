@@ -14,6 +14,4 @@ void monitor_write(char *c);
 
 void monitor_print_hex(uint64_t x, uint8_t bits);
 
-void hang(void);
-
 #endif // MONITOR_H

@@ -1,7 +1,7 @@
 #include "meminfo.h"
 #include "print.h"
 
-#ifdef DEBUG
+#ifndef NODEBUG
 void print_meminfo(meminfo_t *arr_meminfo, uint64_t nSMAP)
 {
     uint64_t i;
