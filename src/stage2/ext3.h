@@ -116,7 +116,7 @@ typedef struct
 typedef struct
 {
     uint32_t begBlock;
-    uint32_t begiNode;
+    uint32_t begiBitmap;
     uint32_t begiTable;
     uint16_t freeBlock;
     uint16_t freeiNode;
