@@ -1,4 +1,11 @@
+#include "basicconsole.h"
+
+NAMESPACE_BEGIN
 extern "C" void __Start()
 {
-    while(1);
+    BasicConsole console;
+    console.puts("hello");
+    while (1)
+        ;
 }
+NAMESPACE_END
