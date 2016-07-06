@@ -1,4 +1,4 @@
-CC=gcc
+CC=clang
 CXX=clang++
 CFLAGS=-ffreestanding -Wall -Wextra -mno-sse -mno-sse2 -mno-mmx -Os -fPIC
 CXXFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -mno-sse -mno-sse2 -mno-mmx -O3 -std=c++14 -fPIC

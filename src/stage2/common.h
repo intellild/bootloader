@@ -57,6 +57,18 @@ static inline uint32_t power(uint32_t base, uint32_t exp)
     return ret;
 }
 
+static inline int32_t strequ(char* str1, char* str2, uint8_t len)
+{
+    for (uint8_t i = 0; i < len; i++)
+    {
+        if (str1[i] != str2[i])
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 static inline void hang()
 {
     while (1)

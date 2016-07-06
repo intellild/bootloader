@@ -13,10 +13,9 @@ void stage2()
     asm volatile("movq %%r8,%0"
                  : "=r"(nSMAP)::);
     meminfo_t meminfo[nSMAP];
-    //memcpy(meminfo, (void*)0x1000, sizeof(meminfo_t) * nSMAP);
+    memcpy(meminfo, (void*)0x1000, sizeof(meminfo_t) * nSMAP);
     monitor_init();
-    while (1)
-        ;
+
     monitor_write("reached bootstage2\n");
 #ifndef NODEBUG
     monitor_write("MEMORY INFO:\n");
@@ -31,6 +30,7 @@ void stage2()
     if (ext2_verify_disk(&dpt[0]))
     {
         monitor_write("detected ext2 file system\n");
+        ext2_read(&dpt[0], "kernel", (void*)0x100000);
     }
 
     hang();
