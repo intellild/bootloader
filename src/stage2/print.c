@@ -1,10 +1,18 @@
 #include "print.h"
 #include "common.h"
 
-uint16_t* video_memory = (uint16_t*)0xB8000;
+static uint16_t* video_memory;
 
-static uint8_t cursor_x = 0;
-static uint8_t cursor_y = 0;
+static uint8_t cursor_x;
+static uint8_t cursor_y;
+
+void monitor_init()
+{
+    video_memory = (uint16_t*)0xB8000;
+    cursor_x = 0;
+    cursor_y = 0;
+    monitor_clear();
+}
 
 static void move_cursor(void)
 {

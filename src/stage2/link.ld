@@ -4,27 +4,24 @@
 /*            tutorials: http://www.osdever.net/bkerndev/index.php. */
 
 OUTPUT_FORMAT("binary")
-ENTRY(__Start)
+ENTRY("stage2")
 SECTIONS
 {
-    .text 0x8000:
+    . =0x8000;
+    .text :
     {
-        code = .; _code = .; __code = .;
+        src/stage2/stage2.o(.text)
         *(.text)
     }
 
     .data :
     {
-        data = .; _data = .; __data = .;
         *(.data)
         *(.rodata)
     }
 
     .bss :
     {
-        bss = .; _bss = .; __bss = .;
         *(.bss)
     }
-
-    end = .; _end = .; __end = .;
 }

@@ -3,6 +3,7 @@
 #define EXT2_h
 
 #include <stdint.h>
+#include "disk.h"
 
 #define EXT2_DIRE_UNKNONW 0
 #define EXT2_DIRE_FILE 1
@@ -107,7 +108,10 @@ typedef struct ext2_directory_entry_struct
 	uint8_t nameLen;
 	uint8_t type;
 	char name[256];
-};
+} ext2_directory_entry_t;
 #pragma pack(pop)
+
+int ext2_verify_disk(dpt_t* pdpt);
+void ext2_read(dpt_t* pdpt, char* path, void* dst);
 
 #endif

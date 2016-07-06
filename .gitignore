@@ -4,7 +4,7 @@ GTAGS
 GRTAGS
 GPATH
 .vscode
-
+*.d
 # Compiled Object files
 *.slo
 *.lo

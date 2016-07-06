@@ -1,7 +1,7 @@
-CC=clang
+CC=gcc
 CXX=clang++
-CFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -mno-sse -mno-sse2 -mno-mmx -Os -fPIC
-CXXFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -mno-sse -mno-sse2 -mno-mmx -O3 -std=c++14 -fPIC
+CFLAGS=-ffreestanding -Wall -Wextra -mno-sse -mno-sse2 -mno-mmx -Os -fPIC
+CXXFLAGS=-ffreestanding -Wall -Wextra -fno-exceptions -fno-rtti -mno-sse -mno-sse2 -mno-mmx -O3 -std=c++14 -fPIC
 AS=nasm
 ASFLAGS=
 LD=ld
@@ -26,23 +26,22 @@ bootstage2.bin: $(BS2OBJ)
 
 sinclude $(BS2SRC:.c=.d)
 %d: %c
-	@echo "create depend"
-	$(CC) -MM $(CFLAGS) $< > $@.$$$$; \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
-	$(RM) $@.$$$$
+	$(CC) -MM $(CFLAGS) $< > $@
 
 kernel:$(KOBJ)
 	$(LD) -Tsrc/kernel/link.ld $(KOBJ) -o bin/$@
 
 sinclude $(KSRC:.cpp=.d)
 %d: %cpp
-	$(CC) -MM $(CXXFLAGS) $< > $@.$$$$ \
-	sed 's,\($*\)\.o[ :]*,\1.o $@ ,g' < $@.$$$$ > $@; \
-	$(RM) $@.$$$$
+	$(CXX) -MM $(CXXFLAGS) $< > $@
 
-clean:
-	rm bin/*
+clean:clean2 cleank
+	rm bin/*.bin
+
+clean2:
 	rm src/stage2/*.o
 	rm src/stage2/*.d
+
+cleank:
 	rm src/kernel/*.o
 	rm src/kernel/*.d

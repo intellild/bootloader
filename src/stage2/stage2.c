@@ -1,22 +1,23 @@
 #include "common.h"
-#include "meminfo.h"
 #include "disk.h"
 #include "ext2.h"
+#include "meminfo.h"
 #include "print.h"
 
 static dpt_t dpt[4];
 static uint64_t nSMAP;
 
-void __Start()
+void stage2()
 {
+
     asm volatile("movq %%r8,%0"
                  : "=r"(nSMAP)::);
     meminfo_t meminfo[nSMAP];
-    memcpy(meminfo, (void*)0x1000, sizeof(meminfo_t) * nSMAP);
-
-    monitor_clear();
+    //memcpy(meminfo, (void*)0x1000, sizeof(meminfo_t) * nSMAP);
+    monitor_init();
+    while (1)
+        ;
     monitor_write("reached bootstage2\n");
-
 #ifndef NODEBUG
     monitor_write("MEMORY INFO:\n");
     print_meminfo(meminfo, nSMAP);
@@ -26,6 +27,11 @@ void __Start()
 #ifndef NODEBUG
     print_dpt(dpt);
 #endif
+
+    if (ext2_verify_disk(&dpt[0]))
+    {
+        monitor_write("detected ext2 file system\n");
+    }
 
     hang();
 }
