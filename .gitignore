@@ -3,6 +3,7 @@ bochsout.txt
 GTAGS
 GRTAGS
 GPATH
+.vscode
 
 # Compiled Object files
 *.slo
