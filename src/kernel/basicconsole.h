@@ -33,8 +33,8 @@ public:
 
     struct VideoMemory
     {
-        uint8_t color;
         uint8_t data;
+        uint8_t color;
     };
 #pragma pack(pop)
 
@@ -55,5 +55,6 @@ public:
     BasicConsole();
     void putc(char ch, uint8_t color = make_color(Color::LightGrey, Color::Black));
     void puts(char* msg, uint8_t color = make_color(Color::LightGrey, Color::Black));
+    void clear();
 };
 NAMESPACE_END

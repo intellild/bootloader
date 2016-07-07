@@ -43,15 +43,21 @@ void BasicConsole::putc(char ch, uint8_t color)
 {
     switch (ch)
     {
-    case '\n':
-        m_cursor.x = 0;
-        m_cursor.y++;
-        break;
     case 0x08:
         if (m_cursor.x)
         {
             m_cursor.x--;
         }
+        break;
+    case 0x09:
+        m_cursor.x = (m_cursor.x + 8) & ~(4 - 1);
+        break;
+    case '\r':
+        m_cursor.x = 0;
+        break;
+    case '\n':
+        m_cursor.x = 0;
+        m_cursor.y++;
         break;
     default:
         if (ch >= ' ')
@@ -61,22 +67,38 @@ void BasicConsole::putc(char ch, uint8_t color)
             m_cursor.x++;
         }
         break;
-    };
+    }
 
     if (m_cursor.x >= 80)
     {
         m_cursor.x = 0;
         m_cursor.y++;
     }
+
+    scroll();
+    move_cursor();
 }
 
 void BasicConsole::puts(char* msg, uint8_t color)
 {
-    while (msg)
+    while (*msg)
     {
         putc(*msg, color);
         msg++;
     }
+}
+
+void BasicConsole::clear()
+{
+    m_cursor.x = 0;
+    m_cursor.y = 0;
+    uint8_t color = make_color(Color::LightGrey, Color::Black);
+    for (int i = 0; i < 80 * 25; i++)
+    {
+        m_vbuf[i].color = color;
+        m_vbuf[i].data = 0x20;
+    }
+    move_cursor();
 }
 
 NAMESPACE_END

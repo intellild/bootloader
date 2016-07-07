@@ -7,24 +7,20 @@ OUTPUT_FORMAT("binary")
 ENTRY(__Start)
 SECTIONS
 {
-    .text 0x10000:
+    .text 0x100000:
     {
-        code = .; _code = .; __code = .;
+        src/kernel/kernel.o(.text)
         *(.text)
     }
 
     .data :
     {
-        data = .; _data = .; __data = .;
         *(.data)
         *(.rodata)
     }
 
     .bss :
     {
-        bss = .; _bss = .; __bss = .;
         *(.bss)
     }
-
-    end = .; _end = .; __end = .;
 }

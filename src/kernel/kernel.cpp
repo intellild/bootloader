@@ -4,7 +4,8 @@ NAMESPACE_BEGIN
 extern "C" void __Start()
 {
     BasicConsole console;
-    console.puts("hello");
+    console.clear();
+    console.puts("hello\n\0");
     while (1)
         ;
 }

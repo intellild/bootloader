@@ -112,6 +112,6 @@ typedef struct ext2_directory_entry_struct
 #pragma pack(pop)
 
 int ext2_verify_disk(dpt_t* pdpt);
-void ext2_read(dpt_t* pdpt, char* path, void* dst);
+void ext2_read(dpt_t* pdpt, char* path, uint8_t* dst);
 
 #endif

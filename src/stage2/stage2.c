@@ -33,5 +33,7 @@ void stage2()
         ext2_read(&dpt[0], "kernel", (void*)0x100000);
     }
 
+    asm volatile("jmp 0x100000":::);
+
     hang();
 }
